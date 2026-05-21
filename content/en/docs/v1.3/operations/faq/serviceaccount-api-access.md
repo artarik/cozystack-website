@@ -21,8 +21,8 @@ Before you begin, make sure that:
 Each tenant in Cozystack has a Secret that contains a ServiceAccount token.
 The Secret has the same name as the tenant and is located in the tenant's namespace.
 
-{{< tabs name="get_token" >}}
-{{% tab name="Dashboard" %}}
+{{< tabpane text=true >}}
+{{% tab header="Dashboard" %}}
 
 1.  Log in to the Dashboard as a user with access to the tenant.
 1.  Switch context to the target tenant if needed.
@@ -32,7 +32,7 @@ The Secret has the same name as the tenant and is located in the tenant's namesp
 
 {{% /tab %}}
 
-{{% tab name="kubectl" %}}
+{{% tab header="kubectl" %}}
 
 Retrieve the token for a tenant named `<name>`:
 
@@ -47,7 +47,7 @@ export TOKEN=$(kubectl -n tenant-<name> get tenantsecret tenant-<name> -o json |
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 
 ## Using the Token for API Access
 

@@ -115,8 +115,8 @@ Cozystack самостоятельно управляет сетью (Cilium/Kub
 | kube-proxy | **Отключен** — его заменяет Cilium |
 | Cluster Domain | Должен быть `cozy.local` |
 
-{{< tabs name="kubernetes_distributions" >}}
-{{% tab name="k3s" %}}
+{{< tabpane text=true >}}
+{{% tab header="k3s" %}}
 
 При установке k3s используйте следующие флаги:
 
@@ -137,7 +137,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server \
 Замените `<YOUR_NODE_IP>` на IP-адрес вашего узла.
 
 {{% /tab %}}
-{{% tab name="kubeadm" %}}
+{{% tab header="kubeadm" %}}
 
 Создайте конфигурационный файл kubeadm:
 
@@ -163,7 +163,7 @@ kubeadm init --config kubeadm-config.yaml --skip-phases=addon/kube-proxy
 Не устанавливайте CNI-плагин после `kubeadm init` — Cozystack автоматически развернет Kube-OVN и Cilium.
 
 {{% /tab %}}
-{{% tab name="RKE2" %}}
+{{% tab header="RKE2" %}}
 
 Создайте `/etc/rancher/rke2/config.yaml`:
 
@@ -177,7 +177,7 @@ disable-kube-proxy: true
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 
 ## Установка Cozystack
 

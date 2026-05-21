@@ -402,8 +402,8 @@ kubectl apply -f metallb-ip-address-pool.yml
 
 Создайте и примените ресурсы, необходимые для L2- или BGP-анонса.
 
-{{< tabs name="metallb_announce" >}}
-{{% tab name="L2 mode" %}}
+{{< tabpane text=true >}}
+{{% tab header="L2 mode" %}}
 L2Advertisement использует имя ресурса IPAddressPool, который мы создали на предыдущем шаге.
 
 **metallb-l2-advertisement.yml**
@@ -425,7 +425,7 @@ spec:
 kubectl apply -f metallb-l2-advertisement.yml
 ```
 {{% /tab %}}
-{{% tab name="BGP mode" %}}
+{{% tab header="BGP mode" %}}
 Сначала создайте отдельный ресурс BGPPeer для **каждого** peer'а.
 
 **metallb-bgp-peer.yml**
@@ -463,7 +463,7 @@ kubectl apply -f metallb-bgp-peer.yml
 kubectl apply -f metallb-bgp-advertisement.yml
 ```
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 <br/>
 
 Теперь, когда MetalLB настроен, включите `ingress` в `tenant-root`:

@@ -10,8 +10,8 @@ weight: 10
 
 To flush the etcd state from a node, you can use `talm` or `talosctl` with the following commands:
 
-{{< tabs name="etcd reset tools" >}}
-{{% tab name="Talm" %}}
+{{< tabpane text=true >}}
+{{% tab header="Talm" %}}
 
 Replace `nodeN` with the name of the failed node, for instance, `node0.yaml`:
 
@@ -21,13 +21,13 @@ talm reset -f nodes/nodeN.yaml --system-labels-to-wipe=EPHEMERAL --graceful=fals
 
 {{% /tab %}}
 
-{{% tab name="talosctl" %}}
+{{% tab header="talosctl" %}}
 ```bash
 talosctl reset --system-labels-to-wipe=EPHEMERAL --graceful=false --reboot
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 
 {{% alert color="warning" %}}
 :warning: This command will remove the state from the specified node. Use it with caution.

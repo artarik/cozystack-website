@@ -251,8 +251,8 @@ Cozystack предоставляет [LINSTOR](https://github.com/LINBIT/linstor
 
     Также можно восстановить ранее созданные storage pools после reset узла.
 
-    {{< tabs name="create_storage_pools" >}}
-    {{% tab name="ZFS" %}}
+    {{< tabpane text=true >}}
+    {{% tab header="ZFS" %}}
 
 ```bash
 linstor ps cdp zfs srv1 /dev/sdb --pool-name data --storage-pool data
@@ -270,7 +270,7 @@ kubectl exec -ti -n cozy-linstor ds/linstor-satellite.srv3 -- zpool set failmode
 ```
 
     {{% /tab %}}
-    {{% tab name="LVM" %}}
+    {{% tab header="LVM" %}}
 
 ```bash
 linstor ps cdp lvm srv1 /dev/sdb --pool-name data --storage-pool data
@@ -279,7 +279,7 @@ linstor ps cdp lvm srv3 /dev/sdb --pool-name data --storage-pool data
 ```
 
     {{% /tab %}}
-    {{% tab name="Восстановление ZFS/LVM storage-pool на узлах после reset" %}}
+    {{% tab header="Восстановление ZFS/LVM storage-pool на узлах после reset" %}}
 
 ```bash
 for node in $(kubectl get nodes --no-headers -o custom-columns=":metadata.name"); do
@@ -289,7 +289,7 @@ done
 ```
 
     {{% /tab %}}
-    {{< /tabs >}}
+    {{< /tabpane >}}
 
 1. Проверьте результат, выведя список storage pools:
 
@@ -429,8 +429,8 @@ kubectl apply -f metallb-ip-address-pool.yml
 
 Создайте и примените ресурсы, необходимые для L2 или BGP advertisement.
 
-{{< tabs name="metallb_announce" >}}
-{{% tab name="L2 mode" %}}
+{{< tabpane text=true >}}
+{{% tab header="L2 mode" %}}
 L2Advertisement использует имя ресурса IPAddressPool, который мы создали на предыдущем шаге.
 
 **metallb-l2-advertisement.yml**
@@ -455,7 +455,7 @@ kubectl apply -f metallb-l2-advertisement.yml
 ```
 
 {{% /tab %}}
-{{% tab name="BGP mode" %}}
+{{% tab header="BGP mode" %}}
 Сначала создайте отдельный ресурс BGPPeer для **каждого** peer.
 
 **metallb-bgp-peer.yml**
@@ -498,7 +498,7 @@ kubectl apply -f metallb-bgp-advertisement.yml
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 <br/>
 
 После настройки MetalLB включите `ingress` в `tenant-root`:
