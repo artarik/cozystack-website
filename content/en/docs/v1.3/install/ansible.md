@@ -107,8 +107,8 @@ cozystack_chart_version: "{{< version-pin "cozystack_version" >}}"
 
 Репозиторий collection содержит примеры prepare playbooks для каждого поддерживаемого семейства ОС в каталоге [`examples/`](https://github.com/cozystack/ansible-cozystack/tree/main/examples). Скопируйте подходящий для вашей целевой ОС файл в каталог проекта, затем подключите его как локальный файл:
 
-{{< tabs name="prepare_playbook" >}}
-{{% tab name="Ubuntu / Debian" %}}
+{{< tabpane text=true >}}
+{{% tab header="Ubuntu / Debian" %}}
 
 Скопируйте `prepare-ubuntu.yml` из [examples/ubuntu/](https://github.com/cozystack/ansible-cozystack/tree/main/examples/ubuntu), затем создайте `site.yml`:
 
@@ -124,7 +124,7 @@ cozystack_chart_version: "{{< version-pin "cozystack_version" >}}"
 ```
 
 {{% /tab %}}
-{{% tab name="RHEL / Rocky / Alma" %}}
+{{% tab header="RHEL / Rocky / Alma" %}}
 
 Скопируйте `prepare-rhel.yml` из [examples/rhel/](https://github.com/cozystack/ansible-cozystack/tree/main/examples/rhel), затем создайте `site.yml`:
 
@@ -140,7 +140,7 @@ cozystack_chart_version: "{{< version-pin "cozystack_version" >}}"
 ```
 
 {{% /tab %}}
-{{% tab name="openSUSE / SLE" %}}
+{{% tab header="openSUSE / SLE" %}}
 
 Скопируйте `prepare-suse.yml` из [examples/suse/](https://github.com/cozystack/ansible-cozystack/tree/main/examples/suse), затем создайте `site.yml`:
 
@@ -156,7 +156,7 @@ cozystack_chart_version: "{{< version-pin "cozystack_version" >}}"
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 
 ### 4. Запуск playbook
 
