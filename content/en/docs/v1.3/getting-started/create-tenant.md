@@ -50,8 +50,8 @@ Tenant'ы создаются с помощью приложения Cozystack с
 Технически установить приложения в `tenant-root` можно,
 но для production-окружений это **не рекомендуется**.
 
-{{< tabs name="create_tenant" >}}
-{{% tab name="Через дашборд" %}}
+{{< tabpane text=true >}}
+{{% tab header="Через дашборд" %}}
 
 1.  Откройте дашборд от имени пользователя `tenant-root`.
 1.  Убедитесь, что текущий контекст установлен в `tenant-root`.
@@ -78,7 +78,7 @@ Tenant'ы создаются с помощью приложения Cozystack с
 
 {{% /tab %}}
 
-{{% tab name="Через kubectl" %}}
+{{% tab header="Через kubectl" %}}
 
 Создайте манифест HelmRelease для tenant'а. В качестве отправной точки можно взять манифест, созданный через дашборд:
 
@@ -118,7 +118,7 @@ kubectl -n tenant-root apply -f hr-tenant-team1.yaml
 ```
 
 {{% /tab %}}
-{{< /tabs >}}
+{{< /tabpane >}}
 
 {{% alert color="info" %}}
 Сетевые политики Cilium в Cozystack v1.0+ всегда изолируют соседние tenant'ы
