@@ -1,6 +1,6 @@
 ---
 title: "Self-Signed Certificates"
-linkTitle: "Self-Signed Certificates"
+linkTitle: "Самоподписанные сертификаты"
 description: "Как настроить OIDC с self-signed certificates"
 weight: 60
 aliases:

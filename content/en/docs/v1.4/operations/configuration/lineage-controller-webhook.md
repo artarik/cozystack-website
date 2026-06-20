@@ -1,6 +1,6 @@
 ---
 title: "Lineage Controller Webhook"
-linkTitle: "Lineage Controller Webhook"
+linkTitle: "Вебхук Lineage Controller"
 description: "Что делает lineage-controller-webhook, как он развертывается и какой параметр важно знать."
 weight: 40
 ---

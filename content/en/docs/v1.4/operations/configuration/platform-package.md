@@ -1,6 +1,6 @@
 ---
 title: "Справочник Platform Package"
-linkTitle: "Platform Package"
+linkTitle: "Пакет платформы"
 description: "Справочник по Cozystack Platform Package, который задает ключевые параметры конфигурации для установки и эксплуатации Cozystack."
 weight: 10
 aliases:

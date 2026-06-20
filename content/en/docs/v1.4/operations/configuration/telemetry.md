@@ -1,6 +1,6 @@
 ---
 title: "Telemetry"
-linkTitle: "Telemetry"
+linkTitle: "Телеметрия"
 description: "Телеметрия Cozystack"
 weight: 60
 aliases:

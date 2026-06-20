@@ -1,6 +1,6 @@
 ---
 title: "Multi-Location кластеры"
-linkTitle: "Multi-Location"
+linkTitle: "Несколько площадок"
 description: "Расширение Cozystack management clusters на несколько locations с помощью Kilo WireGuard mesh, cloud autoscaling и local cloud controller manager."
 weight: 40
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Конфигурация Velero Backup"
-linkTitle: "Конфигурация Velero Backup"
+linkTitle: "Настройка резервного копирования Velero"
 description: "Настройка backup storage, strategies и BackupClasses для cluster backups (для cluster administrators)."
 weight: 30
 ---

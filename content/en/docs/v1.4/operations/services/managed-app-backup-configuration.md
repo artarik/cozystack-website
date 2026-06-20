@@ -1,6 +1,6 @@
 ---
 title: "Конфигурация backup для managed applications"
-linkTitle: "Backup managed applications"
+linkTitle: "Резервное копирование управляемых приложений"
 description: "Настройка strategies и BackupClasses для logical data backups managed databases (Postgres, MariaDB, ClickHouse)."
 weight: 31
 ---

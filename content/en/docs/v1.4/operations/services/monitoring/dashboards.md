@@ -1,60 +1,60 @@
 ---
 title: "Monitoring Dashboards"
-linkTitle: "Dashboards"
+linkTitle: "Дашборды"
 description: "Как визуализировать метрики и создавать custom dashboards в Grafana для мониторинга кластеров и приложений Cozystack."
 weight: 10
 ---
 
 ## Обзор
 
-Cozystack интегрирует Grafana как основной инструмент визуализации metrics, собираемых VictoriaMetrics (VM). В этом разделе описан доступ к pre-built dashboards, создание custom visualizations и интеграция external data sources для полноценной наблюдаемости кластеров и приложений Cozystack.
+Cozystack интегрирует Grafana как основной инструмент визуализации метрик, собираемых VictoriaMetrics (VM). В этом разделе описан доступ к предварительно настроенным дашбордам, создание собственных визуализаций и подключение внешних источников данных для полноценной наблюдаемости кластеров и приложений Cozystack.
 
 ## Доступ к Grafana
 
-Чтобы открыть Grafana и посмотреть dashboards:
+Чтобы открыть Grafana и посмотреть дашборды:
 
 1. Перейдите по URL Grafana: `https://grafana.<tenant-domain>`, где `<tenant-domain>` - домен вашего tenant.
-2. Войдите с tenant credentials (OIDC или token-based authentication).
-3. После входа pre-configured dashboards доступны в разделе "Dashboards".
+2. Войдите в систему, используя учётные данные tenant (OIDC или token-based authentication).
+3. После входа предварительно настроенные дашборды доступны в разделе "Dashboards".
 
 Первичную настройку и детали конфигурации см. в [Monitoring Setup]({{% ref "/docs/v1.4/operations/services/monitoring/setup" %}}).
 
 ## Pre-built dashboards
 
-Cozystack предоставляет набор pre-configured dashboards в Grafana, которые автоматически разворачиваются и обновляются через monitoring stack. Эти dashboards определены в файле `packages/extra/monitoring/dashboards.list` и сразу дают представление о производительности системы и приложений.
+Cozystack предоставляет набор предварительно настроенные дашбордов в Grafana, которые автоматически разворачиваются и обновляются через monitoring stack. Эти дашборды определены в файле `packages/extra/monitoring/dashboards.list` и сразу дают представление о производительности системы и приложений.
 
 ### Dashboards инфраструктуры кластера
 
-- **Kubernetes Cluster Overview**: дает верхнеуровневый обзор всего Kubernetes-кластера, включая status узлов, health pods, использование CPU/memory/disk по кластеру и производительность API server. Полезен для быстрой проверки health и поиска resource bottlenecks в кластере.
-- **Node Metrics**: подробные метрики по узлам: CPU usage, memory consumption, disk I/O, network traffic и system load. Включает panels для отдельных узлов и агрегированные представления. Подходит для диагностики проблем конкретного узла.
-- **ETCD Metrics**: мониторит health кластера ETCD, включая latency, storage usage, leader elections и database operations. Важен для надежности данных Kubernetes control plane.
-- **Storage Metrics**: показывает компоненты хранения, такие как Linstor и SeaweedFS: volume usage, I/O operations, replication status и performance metrics. Помогает управлять storage resources и диагностировать storage-related проблемы.
+- **Kubernetes Cluster Overview**: дает верхнеуровневый обзор всего Kubernetes-кластера, включая статус узлов, health pods, использование CPU/memory/disk по кластеру и производительность API server. Полезен для быстрой проверки состояния кластера и выявления узких мест, связанных с ресурсами.
+- **Node Metrics**: подробные метрики по узлам: CPU usage, memory consumption, disk I/O, network traffic и system load. Включает панели для отдельных узлов и агрегированные представления. Подходит для диагностики проблем конкретного узла.
+- **ETCD Metrics**: мониторит состояние кластера ETCD, включая latency, storage usage, leader elections и database operations. Важен для надежности данных Kubernetes control plane.
+- **Storage Metrics**: показывает компоненты хранения, такие как Linstor и SeaweedFS: volume usage, I/O operations, replication status и performance metrics. Помогает управлять ресурсами хранения данных и диагностировать связанные с ними проблемы.
 
 ### Dashboards приложений и сервисов
 
-- **Tenant Applications**: настраиваемые dashboards для пользовательских приложений, показывающие request rates, error rates, response times и throughput. Поддерживают web services, APIs и microservices, работающие в tenant namespaces.
-- **Service Mesh**: метрики сетевых компонентов, включая ingress controllers (например, NGINX, Traefik), load balancers и service mesh proxies. Покрывают traffic patterns, latency, error rates и connectivity health.
-- **Database Metrics**: специализированные dashboards для поддерживаемых баз данных, таких как PostgreSQL, MySQL, Redis и других. Включают query performance, connection counts, cache hit rates и storage metrics. Например, dashboard PostgreSQL показывает active connections, slow queries и replication status.
+- **Tenant Applications**: Настраиваемые дашборды для пользовательских приложений, отображающие частоту запросов, частоту ошибок, время отклика и пропускную способность. Подходят для веб-сервисов, API и микросервисов, работающих в tenant namespaces.
+- **Service Mesh**: метрики сетевых компонентов, включая ingress controllers (например, NGINX, Traefik), load balancers и service mesh proxies. Отображают характеристики трафика, задержки, частоту ошибок и состояние сетевой связности.
+- **Database Metrics**: специализированные дашборды для поддерживаемых баз данных, таких как PostgreSQL, MySQL, Redis и других. Включают показатели производительности запросов, количество подключений, долю попаданий в кеш и метрики хранилища. Например, дашборд PostgreSQL отображает активные подключения, медленные запросы и состояние репликации.
 
-Эти dashboards регулярно обновляются в новых релизах. Скриншоты и визуальные примеры см. в release notes с preview dashboards в [блоге Cozystack](https://cozystack.io/blog/).
+Эти дашборды регулярно обновляются в новых релизах. Скриншоты и визуальные примеры см. в release notes с предпросмотром  дошбордов в [блоге Cozystack](https://cozystack.io/blog/).
 
 ## Создание custom dashboards
 
-Если pre-built dashboards не покрывают ваши потребности, можно создавать custom dashboards в Grafana, чтобы визуализировать конкретные metrics или объединять данные из нескольких sources.
+Если предварительно настроенные дашборды не покрывают ваши потребности, можно создавать пользовательские дашборды в Grafana, чтобы визуализировать конкретные метрики или объединять данные из нескольких источников.
 
 ### Шаги создания custom dashboard
 
 1. **Откройте Grafana**: войдите в Grafana с tenant credentials.
 2. **Создайте новый dashboard**: нажмите значок "+" в боковой панели и выберите "Dashboard".
-3. **Добавьте panels**: нажмите "Add new panel", чтобы создать visualizations. Выберите тип panel и настройте data sources.
+3. **Добавьте панели**: нажмите "Add new panel", чтобы создать блок визуализации. Выберите тип панели и настройте источники данных.
 4. **Настройте queries**: используйте MetricsQL (язык запросов VictoriaMetrics) для получения и преобразования данных.
-5. **Настройте layout**: расположите panels, задайте time ranges и добавьте annotations или variables для интерактивности.
-6. **Сохраните и поделитесь**: сохраните dashboard, настройте permissions и при необходимости экспортируйте его для повторного использования.
+5. **Настройте layout**: расположите панели, задайте временные диапазоны и добавьте аннотации или переменные для интерактивного взаимодействия с дашбордом.
+6. **Сохраните и поделитесь**: сохраните дашбоард, настройте права доступа и при необходимости экспортируйте его для повторного использования.
 
 
 ### Примеры queries
 
-Ниже несколько распространенных MetricsQL queries для custom panels:
+Ниже несколько распространенных MetricsQL запросов для пользовательских панелей:
 
 - **Использование CPU pod**:
   ```promql
@@ -82,22 +82,22 @@ Cozystack предоставляет набор pre-configured dashboards в Gra
 
 ### Типы panels и best practices
 
-- **Time Series (Graph)**: подходит для trends во времени, например CPU usage или request rates. Используйте для визуализации historical data.
-- **Stat**: показывает одиночные значения, например текущий процент CPU или общее число requests. Удобен для быстрых метрик.
-- **Table**: показывает табличные данные, например top processes или alert summaries. Полезен для подробных списков.
-- **Heatmap**: визуализирует density, например error rates по временным интервалам. Эффективен для поиска patterns.
+- **Time Series (Graph)**: Подходит для отображения изменений показателей во времени, например загрузки CPU или частоты запросов. Используйте этот тип визуализации для анализа исторических данных.
+- **Stat**: показывает одиночные значения, например текущий процент CPU или общее число запросов. Удобен для быстрых метрик.
+- **Table**: показывает табличные данные, например top процессов или сводные данные по оповещениям. Полезен для подробных списков.
+- **Heatmap**: отображает плотность распределения значений, например частоту ошибок по временным интервалам. Эффективен для выявления закономерностей.
 - **Gauge**: представляет значения на шкале, например процент использования диска.
 
-При создании panels учитывайте:
-- Используйте подходящие time ranges и refresh intervals.
-- Добавляйте thresholds и alerts прямо в panels для proactive monitoring.
-- Используйте variables для динамической фильтрации, например по namespace или имени pod.
+При создании панелей учитывайте:
+- Используйте подходящие временные промежутки и интервалы обновлений.
+- Добавляйте пороговые значения и правила оповещения непосредственно на панели для проактивного мониторинга.
+- Используйте переменные для динамической фильтрации, например по namespace или имени pod.
 
 Расширенные queries и functions см. в [документации VictoriaMetrics MetricsQL](https://docs.victoriametrics.com/MetricsQL.html).
 
 ## Интеграция external data sources
 
-Cozystack позволяет интегрироваться с внешними monitoring systems, чтобы централизовать observability.
+Cozystack позволяет интегрироваться с внешними системами мониторинга, чтобы централизовать данные наблюдаемости.
 
 ### Добавление External Prometheus
 
@@ -105,23 +105,23 @@ Cozystack позволяет интегрироваться с внешними 
 
 1. В Grafana перейдите в "Configuration" > "Data Sources" > "Add data source".
 2. Выберите тип "Prometheus".
-3. Укажите URL внешнего Prometheus, данные аутентификации (если требуются) и scrape interval.
+3. Укажите URL внешнего Prometheus, данные аутентификации (если требуются) и интервал сбора метрик.
 4. Проверьте соединение и сохраните.
 5. Используйте PromQL в dashboards, чтобы запрашивать внешние данные.
 
 ### Custom application metrics
 
-Для приложений, предоставляющих custom metrics:
+Для приложений, предоставляющих пользовательские метрики:
 
-- Убедитесь, что приложение предоставляет метрики в формате Prometheus, например через endpoint `/metrics`.
+- Убедитесь, что приложение предоставляет метрики в формате Prometheus, например через ендпоинт `/metrics`.
 - Настройте VMAgent в Cozystack на scraping этих endpoints, обновив monitoring configuration.
-- Метрики будут загружены в VM и доступны для query в Grafana.
+- Метрики будут загружены в VM и доступны для запросов в Grafana.
 
 Для совместимости соблюдайте [metric naming conventions](https://prometheus.io/docs/practices/naming/) Prometheus. Примеры конфигурации см. в [Monitoring Hub Reference]({{% ref "/docs/v1.4/operations/services/monitoring" %}}).
 
 ### Интеграция Grafana data sources
 
-Эта диаграмма показывает, как external data sources интегрируются в Grafana для централизованного мониторинга.
+Эта диаграмма показывает, как внешние источники данных интегрируются в Grafana для централизованного мониторинга.
 
 ```mermaid
 graph TD
@@ -135,20 +135,20 @@ graph TD
 
 ## Конфигурация data sources
 
-Grafana в Cozystack заранее настроена с оптимизированными data sources для бесшовной интеграции.
+Grafana в Cozystack заранее настроена с оптимизированными источниками данных для бесшовной интеграции.
 
 ### VictoriaMetrics (VM) Data Source
 
-- **Type**: Prometheus-compatible (MetricsQL).
-- **URL**: внутренний endpoint VM cluster в namespace tenant.
+- **Type**: Prometheus совместимые (MetricsQL).
+- **URL**: внутренний ендпоинт VM cluster в namespace tenant.
 - **Authentication**: автоматическая через service account tokens.
-- **Usage**: основной source для time-series metrics. Поддерживает высокопроизводительные querying и aggregation.
+- **Usage**: основной источник метрик временных рядов. Поддерживает высокопроизводительное выполнение запросов и агрегацию данных.
 
 ### VLogs Data Source
 
-- **Type**: custom plugin для log querying.
-- **Purpose**: включает визуализацию логов и корреляцию с metrics.
-- **Configuration**: автоматически настраивается для tenant-specific log streams.
-- **Usage**: добавляйте log panels в dashboards, чтобы объединять metrics и logs, например для troubleshooting проблем приложений.
+- **Type**: пользовательский плагин для запросов к логам.
+- **Purpose**: включает визуализацию логов и корреляцию с метриками.
+- **Configuration**: автоматически настраивается для tenant-specific потоков логов.
+- **Usage**: добавляйте панели логгирования в дашборды, чтобы объединять метрики и логи, например для поиска проблем приложений.
 
-Чтобы изменить настройки data source, откройте Grafana admin panel (нужны admin privileges) или обновите monitoring configuration через Cozystack API. Подробные параметры см. в [Monitoring Hub Reference]({{% ref "/docs/v1.4/operations/services/monitoring" %}}).
+Чтобы изменить настройки источников данных, откройте Grafana admin panel (нужны admin privileges) или обновите monitoring configuration через Cozystack API. Подробные параметры см. в [Monitoring Hub Reference]({{% ref "/docs/v1.4/operations/services/monitoring" %}}).

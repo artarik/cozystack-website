@@ -1,6 +1,6 @@
 ---
 title: "Руководства для нескольких дата-центров"
-linkTitle: "Multi Datacenter"
+linkTitle: "Несколько ЦОД"
 description: "Как запускать Cozystack в растянутом Kubernetes-кластере"
 weight: 37
 aliases:

@@ -1,6 +1,6 @@
 ---
 title: "Object Storage"
-linkTitle: "Object Storage"
+linkTitle: "Объектное хранилище"
 description: "S3-compatible object storage в Cozystack на базе SeaweedFS и COSI"
 weight: 10
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Справочник cluster services"
-linkTitle: "Cluster services"
+linkTitle: "Сервисы кластера"
 description: "Системные middleware packages, которые разворачиваются в tenants и предоставляют основную функциональность пользовательским приложениям."
 weight: 35
 ---

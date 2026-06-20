@@ -1,6 +1,6 @@
 ---
 title: "Настройка брендинга"
-linkTitle: "Брендинг"
+linkTitle: "Брендирование"
 description: "Настройка брендинга Cozystack Dashboard и страниц аутентификации."
 weight: 50
 ---

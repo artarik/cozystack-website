@@ -1,11 +1,11 @@
 ---
 title: "Buckets и пользователи"
-linkTitle: "Buckets"
-description: "Создание S3 buckets и управление user credentials"
+linkTitle: "Бакеты"
+description: "Создание S3 buckets и управление учетными данными"
 weight: 20
 ---
 
-Приложение Bucket создает S3 bucket через COSI и подготавливает credentials для каждого пользователя в виде Kubernetes Secrets.
+Приложение Bucket создает S3 bucket через COSI и подготавливает учетные данные для каждого пользователя в виде Kubernetes Secrets.
 
 ## Создание Bucket
 
@@ -43,7 +43,7 @@ spec:
 
 ## Object Locking
 
-Чтобы создать bucket с включенным object locking, задайте `locking: true`:
+Чтобы создать bucket с включенной блокировкой объектов, задайте `locking: true`:
 
 ```yaml
 apiVersion: apps.cozystack.io/v1alpha1
@@ -57,7 +57,7 @@ spec:
 ```
 
 Это создает BucketClaim в BucketClass с суффиксом `-lock`, например `tenant-example-ssd-lock`.
-BucketClasses с включенным locking используют deletion policy `Retain` и настраивают object locking в режиме COMPLIANCE с retention period по умолчанию.
+BucketClasses с включенным блокировкой используют политику удаления `Retain` и настраивают блокировку объектов в режиме COMPLIANCE с периодом хранения по умолчанию.
 
 {{< note >}}
 Object locking нельзя включить или отключить после создания bucket. Если нужно изменить эту настройку, создайте новый bucket.
@@ -66,7 +66,7 @@ Object locking нельзя включить или отключить посл�
 ## Пользователи
 
 Map `users` определяет именованных S3-пользователей для bucket.
-Каждая запись создает ресурс COSI BucketAccess и соответствующий Kubernetes Secret с S3 credentials.
+Каждая запись создает ресурс COSI BucketAccess и соответствующий Kubernetes Secret с S3 учетные данные.
 
 ```yaml
 apiVersion: apps.cozystack.io/v1alpha1
@@ -93,12 +93,12 @@ spec:
 
 | Параметр | Тип | По умолчанию | Описание |
 | --- | --- | --- | --- |
-| `readonly` | `bool` | `false` | При `true` создает credentials из BucketAccessClass с суффиксом `-readonly` |
+| `readonly` | `bool` | `false` | При `true` создает учетные данные из BucketAccessClass с суффиксом `-readonly` |
 
-### Доступ к credentials
+### Доступ к учетным данным
 
 Каждый пользователь получает Kubernetes Secret с именем `{bucket-name}-{username}` в том же namespace.
-Secret содержит S3 credentials, созданные COSI driver:
+Secret содержит S3 учетные данные, созданные COSI driver:
 
 ```bash
 kubectl get secret my-bucket-admin -n tenant-example -o yaml
@@ -107,27 +107,27 @@ kubectl get secret my-bucket-admin -n tenant-example -o yaml
 Secret содержит поля, необходимые для настройки S3 client: endpoint, access key, secret key.
 Точный набор полей зависит от реализации COSI driver.
 
-### Ротация credentials
+### Ротация учетных данных
 
-Credentials пользователя bucket (access key и secret key) генерируются один раз при первом создании пользователя и не могут быть обновлены на месте.
-Чтобы ротировать credentials пользователя, удалите пользователя из map `users` и примените изменения, затем добавьте пользователя обратно и примените изменения еще раз:
+Учетные данные пользователя bucket (access key и secret key) генерируются один раз при первом создании пользователя и не могут быть обновлены на месте.
+Чтобы ротировать учетные данные пользователя, удалите пользователя из map `users` и примените изменения, затем добавьте пользователя обратно и примените изменения еще раз:
 
 ```yaml
-# Шаг 1: удалите пользователя, чтобы удалить существующие credentials
+# Шаг 1: удалите пользователя, чтобы удалить существующие учетные данные
 spec:
   users: {}
 ```
 
 ```yaml
-# Шаг 2: добавьте пользователя обратно, чтобы создать новый набор credentials
+# Шаг 2: добавьте пользователя обратно, чтобы создать новый набор учетных данных
 spec:
   users:
     admin: {}
 ```
 
 {{< warning >}}
-Все приложения, использующие старые credentials, потеряют доступ между шагом 1 и шагом 2.
-После завершения шага 2 обновите приложения, указав новые credentials из Secret.
+Все приложения, использующие старые учетные данные, потеряют доступ между шагом 1 и шагом 2.
+После завершения шага 2 обновите приложения, указав новые учетные данные из Secret.
 {{< /warning >}}
 
 ## Логика выбора BucketClass
@@ -171,14 +171,14 @@ spec:
       readonly: true
 ```
 
-После создания bucket получите credentials:
+После создания bucket получите учетные данные:
 
 ```bash
-# Read-write credentials для пользователя "app"
+# Read-write учетные данные для пользователя "app"
 kubectl get secret media-assets-app -n tenant-example \
   -o jsonpath='{.data}' | jq 'map_values(@base64d)'
 
-# Read-only credentials для пользователя "backup-reader"
+# Read-only учетные данные для пользователя "backup-reader"
 kubectl get secret media-assets-backup-reader -n tenant-example \
   -o jsonpath='{.data}' | jq 'map_values(@base64d)'
 ```

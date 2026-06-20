@@ -8,7 +8,7 @@ weight: 10
 
 ## Как очистить состояние etcd
 
-Чтобы удалить состояние etcd с узла, используйте `talm` или `talosctl` со следующими командами:
+Чтобы удалить state etcd с узла, используйте `talm` или `talosctl` со следующими командами:
 
 {{< tabs name="etcd reset tools" >}}
 {{% tab name="Talm" %}}
@@ -30,5 +30,5 @@ talosctl reset --system-labels-to-wipe=EPHEMERAL --graceful=false --reboot
 {{< /tabs >}}
 
 {{% alert color="warning" %}}
-:warning: Эта команда удалит состояние с указанного узла. Используйте ее с осторожностью.
+:warning: Эта команда удалит state с указанного узла. Используйте ее с осторожностью.
 {{% /alert %}}

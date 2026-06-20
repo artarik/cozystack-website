@@ -1,6 +1,6 @@
 ---
 title: "Local Cloud Controller Manager"
-linkTitle: "Local CCM"
+linkTitle: "Локальный CCM"
 description: "Определение IP узлов и lifecycle management для multi-location clusters."
 weight: 15
 ---

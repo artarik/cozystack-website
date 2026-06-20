@@ -12,11 +12,11 @@ source: https://github.com/cozystack/cozystack/blob/release-1.4/packages/extra/e
 
 ## Резервные копии
 
-Когда `backup.enabled` установлен в `true`, chart создает `EtcdBackupSchedule` (etcd.aenix.io/v1alpha1) и `Secret` с S3 credentials. etcd-operator v0.4.3+ преобразует schedule в `CronJob`, который периодически создает snapshot кластера в S3.
+Когда `backup.enabled` установлен в `true`, chart создает `EtcdBackupSchedule` (etcd.aenix.io/v1alpha1) и `Secret` с S3 учетными данными. etcd-operator v0.4.3+ преобразует расписание в `CronJob`, который периодически создает снапшот кластера в S3.
 
-Для включения backup нужно явно задать следующие поля (значения по умолчанию - пустые строки, чтобы отсутствие значений быстро приводило к ошибке при render шаблона): `backup.s3AccessKey`, `backup.s3SecretKey`, `backup.destinationPath` (должен начинаться с `s3://` и не содержать сегментов `//`) и `backup.endpointURL`. S3 credentials, переданные через обычные values, попадают в manifest HelmRelease. Для production-развертываний лучше использовать внешний инструмент управления secrets (ESO, Sealed Secrets и т. п.), а не коммитить ключи в Git.
+Для включения backup нужно явно задать следующие поля (значения по умолчанию - пустые строки, чтобы отсутствие значений быстро приводило к ошибке при render шаблона): `backup.s3AccessKey`, `backup.s3SecretKey`, `backup.destinationPath` (должен начинаться с `s3://` и не содержать сегментов `//`) и `backup.endpointURL`. S3 учетные данные, переданные через обычные значения, попадают в manifest HelmRelease. Для production-развертываний лучше использовать внешний инструмент управления secrets (ESO, Sealed Secrets и т. п.), а не коммитить ключи в Git.
 
-**Restore** (`EtcdCluster.spec.bootstrap`) и одноразовый custom resource `EtcdBackup`, поставляемый upstream в v0.4.3, пока не доступны через этот chart. Восстановление из snapshot или создание ad-hoc backup сейчас требует вручную применить соответствующий custom resource manifest.
+**Restore** (`EtcdCluster.spec.bootstrap`) и custom resource `EtcdBackup`, поставляемый upstream в v0.4.3, пока не доступны через этот chart. В настоящее время для восстановления из снапшота или создания внеплановой резервной копии необходимо вручную применить манифест соответствующего Custom Resource
 
 ## Параметры
 

@@ -11,13 +11,13 @@ Cozystack использует Fluent Bit для сбора логов и Victor
 
 ### Настройка logs storages
 
-Log storages настраиваются через параметры monitoring hub. У каждого tenant может быть несколько экземпляров log storage с настраиваемыми retention periods и размерами хранилища.
+Log storages настраиваются через параметры monitoring hub. У каждого tenant может быть несколько экземпляров log storage с настраиваемыми периодами хранения и размерами хранилища.
 
 | Параметр | Описание | Тип | По умолчанию |
 |-----------|-------------|------|---------|
 | `logsStorages` | Массив конфигураций log storage | `[]object` | `[]` |
 | `logsStorages[i].name` | Имя экземпляра storage | `string` | `""` |
-| `logsStorages[i].retentionPeriod` | Retention period для логов, например "30d" | `string` | `"1"` |
+| `logsStorages[i].retentionPeriod` | Период хранения для логов, например "30d" | `string` | `"1"` |
 | `logsStorages[i].storage` | Размер persistent volume | `string` | `"10Gi"` |
 | `logsStorages[i].storageClassName` | StorageClass для хранения данных | `string` | `"replicated"` |
 
@@ -29,7 +29,7 @@ Fluent Bit настроен на сбор логов из:
 
 - **Kubernetes Pods**: container logs из всех namespaces
 - **System Logs**: логи уровня узла и системных сервисов
-- **Application Logs**: custom log sources через sidecar containers
+- **Application Logs**: пользовательские источники логов, подключаемые через sidecar-контейнеры.
 
 #### Пример конфигурации Fluent Bit input
 
@@ -54,7 +54,7 @@ data:
         Port  9428
 ```
 
-Логи отправляются в VictoriaLogs для хранения и индексирования. Output plugin дополняет логи metadata, например именами pod, namespaces и timestamps.
+Логи отправляются в VictoriaLogs для хранения и индексирования. Output plugin дополняет логи metadata, например именами pod, namespaces и временными метками.
 
 ## Архитектура логирования
 
@@ -81,7 +81,7 @@ VictoriaLogs (VLogs) предоставляет мощные возможнос�
 
 #### Пример VLogs query
 
-Чтобы найти error logs из конкретного pod:
+Чтобы найти записи об ошибках из конкретного пода:
 
 ```text
 _level:ERROR AND kubernetes_pod_name: "my-app-pod"
@@ -89,17 +89,17 @@ _level:ERROR AND kubernetes_pod_name: "my-app-pod"
 
 ### Filters и metadata
 
-Логи в Cozystack содержат богатую metadata для эффективной фильтрации:
+Логи в Cozystack содержат подробные метаданные для эффективной фильтрации:
 
 - **Pod Metadata**: `kubernetes_pod_name`, `kubernetes_namespace_name`, `kubernetes_container_name`
 - **Tenant**: `tenant` - определяет, к какому tenant относятся логи
 - **Log Levels**: `_level` (INFO, WARN, ERROR и т. д.)
-- **Timestamps**: автоматический parsing timestamps
-- **Custom Labels**: application-specific labels, добавляемые при сборе
+- **Timestamps**: автоматическое распознавание и обработка временных меток.
+- **Custom Labels**: labels, относящиеся к конкретному приложению и добавляемые при сборе логов.
 
 #### Расширенная фильтрация
 
-Используйте сложные queries для корреляции логов:
+Используйте сложные запросы для корреляции логов:
 
 ```text
 kubernetes_namespace_name: "kube-system" AND _level: "WARN" AND _msg: *timeout*
@@ -109,13 +109,13 @@ kubernetes_namespace_name: "kube-system" AND _level: "WARN" AND _msg: *timeout*
 
 ## Просмотр логов tenant Kubernetes cluster
 
-Когда workloads работают в [tenant Kubernetes cluster]({{% ref "/docs/v1.4/kubernetes" %}}), их логи собираются и отправляются в экземпляр VictoriaLogs родительского tenant. Затем эти логи можно запрашивать в Grafana с помощью специальных label filters.
+Когда рабочие нагрузки выполняются в [tenant Kubernetes cluster]({{% ref "/docs/v1.4/kubernetes" %}}), их логи собираются и отправляются в экземпляр VictoriaLogs родительского tenant. Затем эти логи можно запрашивать в Grafana с помощью специальных фильтров по label.
 
 ### Предварительные требования
 
-Включите addon `monitoringAgents` в tenant Kubernetes cluster. Он разворачивает внутри кластера agents, которые собирают логи и отправляют их в VictoriaLogs.
+Включите addon `monitoringAgents` в tenant Kubernetes cluster. Он разворачивает внутри кластера агентов, которые собирают логи и отправляют их в VictoriaLogs.
 
-Через Cozystack dashboard задайте `addons.monitoringAgents.enabled: true` в параметрах Kubernetes application или примените это программно:
+Через Cozystack дашборд задайте `addons.monitoringAgents.enabled: true` в параметрах Kubernetes application или примените это программно:
 
 ```yaml
 addons:
@@ -181,7 +181,7 @@ tenant: "tenant-workload" AND kubernetes_namespace_name: "default" AND kubernete
 
 ### Обогащение логов labels
 
-Добавляйте custom labels в логи для расширенной фильтрации:
+Добавляйте пользовательские labels в логи для расширенной фильтрации:
 
 - **Tenant Labels**: автоматически добавляются для multi-tenancy
 - **Application Labels**: custom labels, например `app_version`, `environment`
@@ -189,7 +189,7 @@ tenant: "tenant-workload" AND kubernetes_namespace_name: "default" AND kubernete
 
 #### Пример конфигурации приложения
 
-Настройте logging в приложении так, чтобы он включал structured data:
+Настройте логгирование в приложении так, чтобы он включал структурированные данные:
 
 ```python
 import logging
@@ -207,4 +207,4 @@ def log_event(level, message, **kwargs):
     logger.info(json.dumps(log_entry))
 ```
 
-Убедитесь, что Fluent Bit parsers настроены на обработку вашего формата логов. Подробности настройки см. в [Monitoring Setup]({{% ref "/docs/v1.4/operations/services/monitoring/setup" %}}).
+Убедитесь, что парсеры Fluent Bit настроены на обработку вашего формата логов. Подробности настройки см. в [Monitoring Setup]({{% ref "/docs/v1.4/operations/services/monitoring/setup" %}}).

@@ -1,6 +1,6 @@
 ---
 title: "Включение OIDC Server"
-linkTitle: "OIDC Server"
+linkTitle: "Сервер OIDC"
 description: "Как включить OIDC Server"
 weight: 36
 aliases:

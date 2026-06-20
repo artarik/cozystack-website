@@ -1,13 +1,13 @@
 ---
 title: "Alerting в мониторинге"
-linkTitle: "Alerting"
+linkTitle: "Оповещения"
 description: "Настройка и управление alerts в системе мониторинга Cozystack с помощью Alerta и Alertmanager."
 weight: 36
 ---
 
 ## Обзор
 
-Система alerting в Cozystack объединяет Prometheus, Alertmanager и Alerta, обеспечивая полноценный мониторинг и уведомления. Alerts создаются на основе metrics, собранных VMAgent и сохраненных в VMCluster, затем проходят через Alertmanager для grouping и deduplication, а после этого управляются Alerta для отправки notifications через разные каналы, например Telegram и Slack.
+Система оповещения в Cozystack объединяет Prometheus, Alertmanager и Alerta, обеспечивая полноценный мониторинг и уведомления. Alerts создаются на основе метрик, собранных VMAgent и сохраненных в VMCluster, затем Alertmanager группирует их и устраняет дубликаты, после чего Alerta управляет отправкой уведомлений по различным каналам, например Telegram и Slack.
 
 ### Поток alerting
 
@@ -26,18 +26,18 @@ sequenceDiagram
 
 ## Настройка alerts в Alerta
 
-Alerta - alerting system, интегрированная в monitoring stack Cozystack. Она обрабатывает alerts из разных sources и отправляет notifications через несколько channels.
+Alerta - это система оповещения, интегрированная в стек мониторинга Cozystack. Она обрабатывает алерты из разных источников и отправляет оповещения через несколько каналов.
 
 ### Alert rules
 
-Alerts создаются на основе Prometheus rules, определенных в monitoring configuration. Custom alert rules можно настроить, изменив ресурсы PrometheusRule в namespace вашего tenant.
+Алерты создаются на основе Prometheus правил, определенных в конфигурации мониторинга. Пользовательские правила оповещения можно настроить, изменив ресурсы PrometheusRule в namespace вашего tenant.
 
-Чтобы создать custom alerts, определите PrometheusRule manifests с expressions, которые становятся true при выполнении alert condition. Каждое rule включает:
+Чтобы создать свое правило оповещения, создайте манифесты PrometheusRule с выражениями, которые срабатывают при выполнении заданных условий. Каждое правило включает:
 
-- **expr**: PromQL expression для вычисления.
-- **for**: длительность, в течение которой условие должно быть true перед firing alert.
+- **expr**: PromQL выражение для вычисления.
+- **for**: время, в течение которого условие должно непрерывно выполняться перед срабатыванием алерта.
 - **labels**: metadata, например severity.
-- **annotations**: описательная информация для notifications.
+- **annotations**: дополнительная информация, включаемая в уведомления.
 
 Пример custom alert rule:
 
@@ -63,7 +63,7 @@ spec:
 
 ### Уровни severity
 
-Alerta поддерживает следующие уровни severity:
+Alerta поддерживает следующие уровни критичности:
 
 - **informational**: низкоприоритетная информация
 - **warning**: потенциальные проблемы, требующие внимания
@@ -71,13 +71,13 @@ Alerta поддерживает следующие уровни severity:
 - **major**: значимые проблемы, влияющие на эксплуатацию
 - **minor**: небольшие проблемы
 
-В конфигурации Alerta можно задать, какие severities вызывают notifications.
+В конфигурации Alerta можно задать, какие уровни критичности вызывают оповещение.
 
 ### Интеграции
 
 #### Интеграция Telegram
 
-Чтобы включить Telegram notifications, задайте следующее в настройках monitoring:
+Чтобы включить Telegram оповещения, задайте следующее в настройках monitoring:
 
 ```yaml
 alerta:
@@ -91,7 +91,7 @@ alerta:
 
 #### Интеграция Slack
 
-Для Slack notifications:
+Для Slack оповещений:
 
 ```yaml
 alerta:
@@ -105,7 +105,7 @@ alerta:
 
 #### Интеграция Email
 
-Чтобы включить email notifications:
+Чтобы включить email оповещения:
 
 ```yaml
 alerta:
@@ -117,13 +117,13 @@ alerta:
       smtpPassword: "your-password"
       fromAddress: "alerts@example.com"
       toAddress: "team@example.com"
-      disabledSeverity: 
+      disabledSeverity:
         - informational
 ```
 
 #### Интеграция PagerDuty
 
-Для PagerDuty notifications:
+Для PagerDuty оповещений:
 
 ```yaml
 alerta:
@@ -139,7 +139,7 @@ alerta:
 
 ## Примеры alerts
 
-Ниже распространенные примеры alerts для system monitoring:
+Ниже приведены распространённые примеры алертов для мониторинга системы:
 
 ### Alert по CPU usage
 
@@ -236,34 +236,34 @@ alerta:
 
 ### Escalation
 
-Alerts можно escalatе-ить на основе duration и severity. Настройте escalation policies в Alerta, чтобы автоматически повышать severity или уведомлять дополнительные channels, если alert остается нерешенным.
+Alerts можно эскалировать на основе длительности и важности. Настройте политики эскалирования в Alerta, чтобы автоматически повышать критичность или уведомлять по дополнительным каналам, если алерт остается нерешенным.
 
-Escalation помогает гарантировать, что critical issues будут обработаны вовремя. Escalation rules можно определить на основе:
+Эскалация помогает гарантировать своевременное устранение критических проблем. Правила эскалации можно определить на основе:
 
-- Time thresholds, например escalation через 15 minutes
+- Time thresholds, например эскалация через 15 минут
 - Severity levels
-- Alert attributes, например конкретные services или environments
+- Alert attributes, например конкретные сервисы или окружения
 
-Пример escalation configuration:
+Пример настройки эскалации:
 
 - Warning alerts переходят в critical через 30 минут
-- Critical alerts немедленно уведомляют on-call personnel
-- Major alerts уведомляют management через 1 час
+- Critical alerts немедленно уведомляют дежурных специалистов
+- Major alerts уведомляют руководство через 1 час
 
-Чтобы настроить escalation в Alerta, используйте web interface или API для настройки escalation policies для разных alert types.
+Чтобы настроить эскалацию в Alerta, используйте web interface или API для настройки политик эскалации для разных alert types.
 
 ### Suppression
 
-Alerts можно временно suppress-ить с помощью функции silencing в Alerta. Это полезно во время maintenance windows, planned outages или при расследовании известных проблем без отправки notifications.
+Alerts можно временно приостанавлитьва или отключать с помощью функции silencing в Alerta. Это полезно во время окон технического обслуживания, плановых простоев или расследования известных проблем, когда отправка уведомлений не требуется.
 
-Silences можно создавать для конкретных alerts или на основе filters вроде environment, resource или event type. Silenced alerts остаются видимыми в dashboard Alerta, но не создают notifications.
+Silences можно создавать для конкретных алертов или на основе фильтров вроде окружения, ресурса или типа события. Silenced alerts остаются видимыми в дашборде Alerta, но не создают оповещений.
 
 Чтобы создать silence:
 
 1. Откройте web interface Alerta
 2. Перейдите в раздел Alerts
-3. Выберите alert для silence или используйте filters, чтобы silence применился к нескольким alerts
-4. Выберите "Silence" и задайте duration и reason
+3. Выберите alert для silence или используйте фильтры, чтобы silence применился к нескольким алертам
+4. Выберите "Silence" и задайте длительность и причину
 
 Либо используйте API:
 
@@ -281,15 +281,15 @@ curl -X POST https://alerta.example.com/api/v2/silences \
   }'
 ```
 
-Silences также можно управлять через Alertmanager для более продвинутого suppression на основе routing.
+Silences также можно управлять через Alertmanager для более продвинутой приостановки на основе маршрутизации.
 
 ## Конфигурация Alertmanager
 
-Alertmanager выполняет routing, grouping и deduplication alerts перед отправкой notifications. Он работает как посредник между Prometheus и notification systems вроде Alerta.
+Alertmanager выполняет маршрутизацию, группировку и дедупликацию алертов перед отправкой уведомлений. Он выступает посредником между Prometheus и системами оповещения, такими как Alerta.
 
 ### Grouping
 
-Alerts можно группировать по labels, чтобы снизить noise и предотвратить alert fatigue. Настройте grouping в конфигурации Alertmanager:
+Алерты можно группировать по меткам, чтобы снизить уровень шума и избежать перегрузки из-за большого количества оповещений. Настройте группировку в конфигурации Alertmanager:
 
 ```yaml
 route:
@@ -307,7 +307,7 @@ route:
 
 ### Routing
 
-Route alerts к разным receivers на основе labels, чтобы отправлять targeted notifications:
+Маршрутизируйте алерты различным получателям на основе меток, чтобы отправлять адресные уведомления:
 
 ```yaml
 route:
@@ -346,7 +346,7 @@ receivers:
 
 ### Inhibition
 
-Используйте inhibition rules, чтобы подавлять одни alerts, когда сработали другие связанные alerts:
+Используйте правила подавления, чтобы не отправлять одни алерты, когда уже сработали другие связанные с ними алерты:
 
 ```yaml
 inhibit_rules:

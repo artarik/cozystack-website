@@ -1,6 +1,6 @@
 ---
 title: "Устранение crash loop у LINSTOR controller"
-linkTitle: "LINSTOR: проблемы controller"
+linkTitle: "LINSTOR: проблемы контроллера"
 description: "Как устранять проблемы LINSTOR controller."
 weight: 100
 ---

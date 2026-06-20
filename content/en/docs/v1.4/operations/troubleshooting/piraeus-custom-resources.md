@@ -1,6 +1,6 @@
 ---
 title: "Устранение неполадок Piraeus custom resources"
-linkTitle: "Piraeus: custom resources зависли"
+linkTitle: "Piraeus: зависшие пользовательские ресурсы"
 description: "Как устранять проблемы с зависшими Piraeus custom resources."
 weight: 150
 ---

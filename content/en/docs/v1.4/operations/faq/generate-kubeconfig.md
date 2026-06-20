@@ -1,6 +1,6 @@
 ---
 title: "Как сгенерировать kubeconfig для пользователей tenant"
-linkTitle: "Генерация tenant kubeconfig"
+linkTitle: "Генерация kubeconfig тенанта"
 description: "Руководство по генерации kubeconfig-файла для пользователей tenant в Cozystack."
 weight: 30
 aliases:

@@ -1,6 +1,6 @@
 ---
 title: "Scheduling Classes"
-linkTitle: "Scheduling Classes"
+linkTitle: "Классы планирования"
 description: "Ограничение tenant workload конкретными узлами или failure domain с помощью ресурсов SchedulingClass и планировщика Cozystack."
 weight: 150
 ---

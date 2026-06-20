@@ -1,6 +1,6 @@
 ---
 title: "Конфигурация SeaweedFS Multi-DC"
-linkTitle: "SeaweedFS Multi-DC"
+linkTitle: "SeaweedFS в нескольких ЦОД"
 description: "Как развернуть SeaweedFS в нескольких дата-центрах"
 weight: 175
 ---

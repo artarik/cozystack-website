@@ -1,6 +1,6 @@
 ---
 title: "Networking Mesh"
-linkTitle: "Networking Mesh"
+linkTitle: "Сетевая связность"
 description: "Настройка Kilo WireGuard mesh с Cilium для связности multi-location cluster."
 weight: 10
 ---

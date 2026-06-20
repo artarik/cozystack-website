@@ -7,7 +7,7 @@ weight: 2
 
 ## Обзор
 
-Cozystack предоставляет комплексную систему monitoring и alerting для Kubernetes-кластеров и приложений. Система основана на Victoria Metrics для хранения metrics и logs, Grafana для визуализации, Alerta для alerting и WorkloadMonitor для мониторинга состояния приложений.
+Cozystack предоставляет комплексную систему monitoring и alerting для Kubernetes-кластеров и приложений. Система основана на Victoria Metrics для хранения метрик и логов, Grafana для визуализации, Alerta для оповещений и WorkloadMonitor для мониторинга состояния приложений.
 
 Архитектура разделена на два уровня:
 
@@ -28,7 +28,7 @@ helm upgrade --install monitoring-agents ./packages/system/monitoring-agents -n 
 
 ### Мониторинг tenant
 
-Monitoring для конкретного tenant активируется patch ресурса Tenant (CRD `apps.cozystack.io/v1alpha1/Tenant`).
+Мониторинг для конкретного tenant активируется patch ресурса Tenant (CRD `apps.cozystack.io/v1alpha1/Tenant`).
 
 #### Через Dashboard UI
 
@@ -42,14 +42,14 @@ Monitoring для конкретного tenant активируется patch �
 kubectl patch tenant <tenant-name> --type merge -p '{"spec":{"values":{"monitoring": true}}}'
 ```
 
-После активации FluxCD автоматически разворачивает HelmRelease `monitoring` в namespace tenant из template `packages/apps/tenant/templates/monitoring.yaml`.
+После активации FluxCD автоматически разворачивает HelmRelease `monitoring` в namespace tenant из шаблона `packages/apps/tenant/templates/monitoring.yaml`.
 
 ## Архитектура компонентов
 
 ### Системный уровень
 
 #### VMAgent
-- **Роль**: agent для сбора cluster metrics
+- **Роль**: agent для сбора cluster метрик
 - **Конфигурация**:
   - Scrape interval: 30 секунд
   - External labels: `cluster: cozystack, tenant: tenant-root`
@@ -61,17 +61,17 @@ kubectl patch tenant <tenant-name> --type merge -p '{"spec":{"values":{"monitori
   - cAdvisor (via kubelet)
 
 #### VMRule
-- **Recording Rules**: агрегированные metrics
+- **Recording Rules**: агрегированные метрики
   - `container_memory:kmem` - kernel memory контейнеров
   - `kube_persistentvolume_is_local` - Local PVs
-  - `kube_controller_pod` - связи Pod с controllers
-- **Alerting Rules**: стандартные alerts Prometheus
-  - `TargetDown` - недоступные targets
-  - `Watchdog` - тестовый alert
+  - `kube_controller_pod` - связи Pod с контроллерами
+- **Alerting Rules**: стандартные алерты Prometheus
+  - `TargetDown` - недоступные таргеты
+  - `Watchdog` - тестовый алерт
   - Kubernetes-specific alerts (apiserver, etcd, nodes, pods)
 
 #### Fluent Bit
-- **Роль**: сбор и агрегация logs
+- **Роль**: сбор и агрегация логов
 - **Inputs**:
   - Container logs: `/var/log/containers/*.log`
   - Kubernetes events
@@ -84,58 +84,58 @@ kubectl patch tenant <tenant-name> --type merge -p '{"spec":{"values":{"monitori
 - **Конфигурация**:
   - Grouping по `alertname`, `namespace`, `cluster`
   - Routes: Alerta webhook, blackhole для `severity="none"`
-- **Интеграция**: webhook в Alerta для notifications
+- **Интеграция**: webhook в Alerta для нотификаций
 
 ### Уровень tenant
 
 #### Victoria Metrics Cluster
 - **Компоненты**:
-  - `vminsert`: прием metrics (2 replicas)
-  - `vmselect`: queries metrics (2 replicas, 2Gi cache)
-  - `vmstorage`: storage (2 replicas, 10Gi PVC)
+  - `vminsert`: прием метрик (2 replicas)
+  - `vmselect`: запросы метрик (2 replicas, 2Gi cache)
+  - `vmstorage`: хранение метрик (2 replicas, 10Gi PVC)
 - **Storage**:
-  - Shortterm: retention 3 дня, deduplication 15s
-  - Longterm: retention 14 дней, deduplication 5m
+  - Shortterm: хранение 3 дня, дедупликация 15s
+  - Longterm: хранение 14 дней, дедупликация 5m
   - Replication: factor 2
 
 #### Victoria Logs
-- **Роль**: хранение structured logs
-- **Конфигурация**: retention 1 год, 10Gi PVC
+- **Роль**: хранение структурированных логов
+- **Конфигурация**: хранение 1 год, 10Gi PVC
 
 #### Grafana
-- **Роль**: визуализация metrics и logs
+- **Роль**: визуализация метрик и логов
 - **Database**: PostgreSQL (10Gi PVC)
 - **Datasources**:
-  - Victoria Metrics (metrics)
-  - Victoria Logs (logs)
+  - Victoria Metrics (метрики)
+  - Victoria Logs (логи)
 - **Ingress**: `grafana.{tenant-host}`
 - **Resources**: 2 replicas, limits 1 CPU/1Gi RAM
-- **Dashboards**: pre-configured для всех компонентов Cozystack
+- **Dashboards**: готовые дашборды для всех компонентов Cozystack
 
 #### Alerta
-- **Роль**: centralized alerting
+- **Роль**: централизовання система оповещения
 - **Database**: PostgreSQL (10Gi PVC)
 - **Notifications**: Telegram, Slack
 - **API**: Protected by API key
 - **Ingress**: `alerta.{tenant-host}`
 
 #### VMAlert (tenant)
-- **Роль**: alert evaluation для tenant
-- **Datasource**: vmselect shortterm
-- **Remote write**: обратно в vminsert shortterm
+- **Роль**: вычисление правил алертинга для tenant
+- **Datasource**: запросы к краткосрочным данным
+- **Remote write**: запись краткосрочных данных
 - **Evaluation interval**: 15 seconds
 
 #### VMAgent (tenant)
-- **Роль**: сбор metrics из namespace tenant
+- **Роль**: сбор метрик из namespace tenant
 - **Selector**: `namespace.cozystack.io/monitoring`
 - **External labels**: `cluster: cozystack, tenant: {namespace}`
-- **Remote write**: vminsert shortterm and longterm
+- **Remote write**: запись краткосрочных и долгосрочных данных
 
 ## Мониторинг приложений
 
 ### WorkloadMonitor CRD
 
-WorkloadMonitor (`cozystack.io/v1alpha1/WorkloadMonitor`) в первую очередь используется для billing, отслеживания состояний workloads и сбора resource metrics. Alerting является дополнительной функцией.
+WorkloadMonitor (`cozystack.io/v1alpha1/WorkloadMonitor`) в первую очередь используется для биллинга, отслеживания состояний workloads и сбора метрик ресурсов. Alerting является дополнительной функцией.
 
 #### Спецификация
 
@@ -166,12 +166,12 @@ status:
 ### WorkloadMonitor Controller
 
 - Отслеживает Pods, PVCs, Services по selector
-- Создает CRD Workload с агрегированными metrics для billing
+- Создает CRD Workload с агрегированными метриками для биллинга
 - Экспортирует metrics через kube-state-metrics
 
 ### Alerting Integration
 
-Хотя WorkloadMonitor предназначен для billing, он также интегрируется с alerting. Alert срабатывает при `cozy_workload_status_operational{operational="false"} == 1`:
+Хотя WorkloadMonitor предназначен для биллинга, он также интегрируется с alerting. Alert срабатывает при `cozy_workload_status_operational{operational="false"} == 1`:
 
 1. VMAlert вычисляет rule
 2. Отправляет alert в Alertmanager
@@ -248,7 +248,7 @@ graph TD
         SYS_VL[VLogs tenant-root]
         SYS_AM[Alertmanager]
     end
-    
+
     subgraph "Tenant Level"
         T_VMA[VMAgent Tenant]
         T_VM[VMCluster Tenant<br/>shortterm + longterm]
@@ -259,11 +259,11 @@ graph TD
         T_G[Grafana Tenant]
         T_WM[WorkloadMonitor]
     end
-    
+
     SYS_VMA -->|metrics| SYS_VM
     SYS_FB -->|logs| SYS_VL
     SYS_AM -->|alerts| T_AL
-    
+
     T_VMA -->|metrics| T_VM
     T_VA -->|read| T_VM
     T_VA -->|write| T_VM
@@ -273,7 +273,7 @@ graph TD
     T_G -->|datasources| T_VM
     T_G -->|datasources| T_VL
     T_WM -->|metrics| T_VMA
-    
+
     Apps[Applications<br/>MySQL, Kafka, etc.] --> T_WM
     Infra[Infrastructure<br/>Pods, Nodes, etc.] --> SYS_VMA
     Infra --> SYS_FB
@@ -339,7 +339,7 @@ alerta:
 
 ### Dashboard Grafana
 
-Cozystack включает pre-configured dashboards для:
+Cozystack включает готовые дашборды для:
 
 - **Kubernetes**: nodes, pods, control-plane
 - **Victoria Metrics**: cluster, agent, alert
@@ -352,16 +352,16 @@ Dashboards определены в `packages/extra/monitoring/dashboards.list`.
 Чтобы открыть Grafana:
 
 1. Перейдите на `https://grafana.{tenant-host}`
-2. Войдите с credentials по умолчанию (admin/admin) или настроенными credentials
-3. Посмотрите pre-configured dashboards в разделе Dashboards
+2. Войдите с дефолтными учетными данными (admin/admin) или настроенными
+3. Посмотрите готовые дашборды в разделе Dashboards
 
 ## Безопасность и масштабируемость
 
 ### Безопасность
 
 - **RBAC**: минимальные права для service accounts
-- **Network Policies**: ограничение traffic между компонентами
-- **TLS**: Ingress с TLS certificates
+- **Network Policies**: ограничение трафика между компонентами
+- **TLS**: Ingress с TLS сертификатами
 - **API Keys**: аутентификация для Alerta
 
 ### Масштабируемость
@@ -401,7 +401,7 @@ kubectl get pods -n <tenant-namespace> -l app.kubernetes.io/name=alerta
 kubectl get workloadmonitor -n <tenant-namespace>
 ```
 
-### Просмотр logs
+### Просмотр логов
 
 ```bash
 # Логи VMAgent

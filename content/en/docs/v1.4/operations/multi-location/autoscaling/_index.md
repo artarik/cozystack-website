@@ -1,6 +1,6 @@
 ---
 title: "Cluster Autoscaling"
-linkTitle: "Autoscaling"
+linkTitle: "Автомасштабирование"
 description: "Автоматическое масштабирование узлов Cozystack management clusters с помощью Kubernetes Cluster Autoscaler."
 weight: 20
 ---

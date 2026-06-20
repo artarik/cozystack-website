@@ -1,6 +1,6 @@
 ---
 title: "White Labeling"
-linkTitle: "White Labeling"
+linkTitle: "Брендирование"
 description: "Настройка брендинга в Cozystack Dashboard и на страницах аутентификации Keycloak, включая custom Keycloak themes"
 weight: 50
 ---
